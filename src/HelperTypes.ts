@@ -28,6 +28,9 @@ export interface Dataset {
 
   /** Stroke Dash Offset */
   strokeDashOffset?: number;
+
+  /** Index to identify a specific Dataset when using multiple */
+  index?: number;
 }
 
 export interface ChartData {

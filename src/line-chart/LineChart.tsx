@@ -175,6 +175,18 @@ export interface LineChartProps extends AbstractChartProps {
     y: number;
     index: number;
     indexData: number;
+    dataSetIndex: number;
+  }) => React.ReactNode;
+  /**
+   * Renders additional content for dots in a line chart.
+   * Takes `({x, y, index})` as arguments.
+   */
+  replaceDotContent?: (params: {
+    x: number;
+    y: number;
+    index: number;
+    indexData: number;
+    dataSetIndex: number;
   }) => React.ReactNode;
   /**
    * Rotation angle of the horizontal labels - default 0 (degrees).
@@ -276,6 +288,9 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
       hidePointsAtIndex = [],
       renderDotContent = () => {
         return null;
+      },
+      replaceDotContent = () => {
+        return null;
       }
     } = this.props;
 
@@ -309,6 +324,11 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
           });
         };
 
+        if (replaceDotContent) {
+          replaceDotContent({ x: cx, y: cy, index: i, indexData: x, dataSetIndex: dataset.index});
+          return;
+        }
+
         output.push(
           <Circle
             key={Math.random()}
@@ -331,7 +351,7 @@ class LineChart extends AbstractChart<LineChartProps, LineChartState> {
             fillOpacity={0}
             onPress={onPress}
           />,
-          renderDotContent({ x: cx, y: cy, index: i, indexData: x })
+          renderDotContent({ x: cx, y: cy, index: i, indexData: x, dataSetIndex: dataset.index })
         );
       });
     });
